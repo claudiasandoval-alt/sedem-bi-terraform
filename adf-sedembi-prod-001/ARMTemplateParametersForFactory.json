@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-sedembi-prod-001"
+		},
+		"LS_DataLake_SEDEM_accountKey": {
+			"value": ""
+		},
+		"LS_SQLDatabase_DWH_password": {
+			"value": ""
+		},
+		"LS_DataLake_SEDEM_properties_typeProperties_url": {
+			"value": "https://stsedembiprod001.dfs.core.windows.net/"
+		},
+		"LS_SQLDatabase_DWH_properties_typeProperties_server": {
+			"value": "sql-sedembi-prod-001.database.windows.net"
+		},
+		"LS_SQLDatabase_DWH_properties_typeProperties_database": {
+			"value": "sqldb-sedembi-dwh-prod"
+		},
+		"LS_SQLDatabase_DWH_properties_typeProperties_userName": {
+			"value": "admin_sedem"
+		}
+	}
+}
