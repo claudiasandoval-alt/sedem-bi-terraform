@@ -1,0 +1,23 @@
+{
+	"name": "DS_Silver_Parquet_SEGIP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake_SEDEM",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "segip",
+				"fileSystem": "silver"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
