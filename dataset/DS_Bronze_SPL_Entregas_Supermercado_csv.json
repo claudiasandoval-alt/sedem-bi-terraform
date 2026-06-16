@@ -1,0 +1,60 @@
+{
+	"name": "DS_Bronze_SPL_Entregas_Supermercado_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake_SEDEM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Bronze"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "spl_entregas_supermercado.csv",
+				"folderPath": "spl",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "entrega_super_id",
+				"type": "String"
+			},
+			{
+				"name": "asignacion_id",
+				"type": "String"
+			},
+			{
+				"name": "ci_beneficiaria",
+				"type": "String"
+			},
+			{
+				"name": "supermercado_id",
+				"type": "String"
+			},
+			{
+				"name": "fecha_retiro",
+				"type": "String"
+			},
+			{
+				"name": "tipo_carne",
+				"type": "String"
+			},
+			{
+				"name": "cantidad_kg",
+				"type": "String"
+			},
+			{
+				"name": "monto_bs",
+				"type": "String"
+			}
+		]
+	}
+}
