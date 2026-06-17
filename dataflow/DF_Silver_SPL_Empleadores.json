@@ -1,0 +1,61 @@
+{
+	"name": "DF_Silver_SPL_Empleadores",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SPL"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SPL_Empleadores_csv",
+						"type": "DatasetReference"
+					},
+					"name": "empleadores"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SPL_Empleadores",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empleador_id as string,",
+				"          nit as string,",
+				"          razon_social as string,",
+				"          tipo as string,",
+				"          nro_patronal as string,",
+				"          municipio as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> empleadores",
+				"empleadores derive(empleador_id =      toInteger(trim(empleador_id)),",
+				"          nit = trim(toString(nit)),",
+				"          razon_social = trim(toString(razon_social)),",
+				"          tipo = initCap(trim(toString(tipo))),",
+				"          municipio = trim(toString(municipio))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

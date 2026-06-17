@@ -1,0 +1,60 @@
+{
+	"name": "DF_Silver_SPL_Cajas",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SPL"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SPL_Cajas_csv",
+						"type": "DatasetReference"
+					},
+					"name": "splcajas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SPL_Cajas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          Nombre as string,",
+				"          Sigla as string,",
+				"          Tipo as string,",
+				"          Estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> splcajas",
+				"splcajas derive(ID = toInteger(ID),",
+				"          Nombre = trim(toString(Nombre)),",
+				"          Sigla = upper(trim(toString(Sigla))),",
+				"          Tipo = iif( isNull(Tipo) || trim(toString(Tipo))=='', 'Sin Tipo', initCap(lower(trim(toString(Tipo)))) ),",
+				"          Estado = iif( isNull(Estado) || trim(toString(Estado))=='', 'Inactiva', initCap(lower(trim(toString(Estado)))) )) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,64 @@
+{
+	"name": "DF_Silver_SPL_Entrega_Agencia",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SPL"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SPL_Entrega_Agencia_csv",
+						"type": "DatasetReference"
+					},
+					"name": "entrAgencia"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SPL_Entrega_Agencia",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          entrega_ag_id as string,",
+				"          asignacion_id as string,",
+				"          ci_beneficiaria as string,",
+				"          fecha_entrega as string,",
+				"          productos as string,",
+				"          lote as string,",
+				"          peso_kg as string,",
+				"          punto_entrega as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> entrAgencia",
+				"entrAgencia derive(ci_beneficiaria = iif(isNull(ci_beneficiaria) || trim(toString(ci_beneficiaria)) == '', 'SIN_CI', upper(regexReplace(trim(toString(ci_beneficiaria)), '[^a-zA-Z0-9]', ''))),",
+				"          fecha_entrega = iif(isNull(fecha_entrega) || trim(toString(fecha_entrega)) == '', toDate(null()), coalesce(toDate(trim(toString(fecha_entrega)), 'yyyy-MM-dd'), toDate(trim(toString(fecha_entrega)), 'dd/MM/yyyy'), toDate(trim(toString(fecha_entrega)), 'dd-MM-yyyy'))),",
+				"          peso_kg =      iif(isNull(peso_kg) || trim(toString(peso_kg)) == '', toDecimal(0.0), toDecimal(replace(trim(toString(peso_kg)), ',', ''))),",
+				"          punto_entrega =      iif(isNull(punto_entrega) || trim(toString(punto_entrega)) == '', 'Sin Especificar', initCap(lower(trim(toString(punto_entrega))))),",
+				"          lote = upper(trim(toString(lote))),",
+				"          productos =      iif(isNull(productos) || trim(toString(productos)) == '', 'Sin Productos', initCap(lower(trim(toString(productos)))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

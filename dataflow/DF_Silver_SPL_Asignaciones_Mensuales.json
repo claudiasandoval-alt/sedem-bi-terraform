@@ -1,0 +1,65 @@
+{
+	"name": "DF_Silver_SPL_Asignaciones_Mensuales",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SPL"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SPL_Asignaciones_Mensuales_csv",
+						"type": "DatasetReference"
+					},
+					"name": "AsigMensuales"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SPL_Asiganciones_Mensuales",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          asignacion_id as string,",
+				"          afiliacion_id as string,",
+				"          mes as string,",
+				"          gestion as string,",
+				"          monto_bs as string,",
+				"          monto_productos as string,",
+				"          monto_carnes as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> AsigMensuales",
+				"AsigMensuales derive(estado = iif(     isNull(estado) || trim(toString(estado))=='',     'Sin Estado',     initCap(lower(trim(toString(estado)))) ),",
+				"          mes = iif(     isNull(mes) || trim(toString(mes))=='',     'Sin Mes',     initCap(lower(trim(toString(mes)))) ),",
+				"          monto_productos = iif(     isNull(monto_productos),     toDecimal(0.0,10,2),     toDecimal(monto_productos,10,2) ),",
+				"          monto_bs = iif(     isNull(monto_bs),     toDecimal(0.0,10,2),     toDecimal(monto_bs,10,2) ),",
+				"          monto_carnes = iif(     isNull(monto_carnes),     toDecimal(0.0,10,2),     toDecimal(monto_carnes,10,2) ),",
+				"          gestion = toInteger(gestion),",
+				"          afiliacion_id = toInteger(afiliacion_id)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

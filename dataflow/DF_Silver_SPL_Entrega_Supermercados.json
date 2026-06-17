@@ -1,0 +1,63 @@
+{
+	"name": "DF_Silver_SPL_Entrega_Supermercados",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SPL"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SPL_Entregas_Supermercado_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SPL_Entregas_Supermercado",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          entrega_super_id as string,",
+				"          asignacion_id as string,",
+				"          ci_beneficiaria as string,",
+				"          supermercado_id as string,",
+				"          fecha_retiro as string,",
+				"          tipo_carne as string,",
+				"          cantidad_kg as string,",
+				"          monto_bs as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(ci_beneficiaria = iif(isNull(ci_beneficiaria) || trim(toString(ci_beneficiaria)) == '', 'SIN_CI', upper(regexReplace(trim(toString(ci_beneficiaria)), '[^a-zA-Z0-9]', ''))),",
+				"          fecha_retiro = iif(isNull(fecha_retiro) || trim(toString(fecha_retiro)) == '', toDate(null()), coalesce(toDate(trim(toString(fecha_retiro)), 'yyyy-MM-dd'), toDate(trim(toString(fecha_retiro)), 'dd-MM-yyyy'), toDate(trim(toString(fecha_retiro)), 'dd/MM/yyyy'), toDate(trim(toString(fecha_retiro)), 'MM/dd/yyyy'))),",
+				"          cantidad_kg =      iif(isNull(cantidad_kg) || trim(toString(cantidad_kg)) == '', toDecimal(0.0), toDecimal(replace(trim(toString(cantidad_kg)), ',', ''))),",
+				"          monto_bs = iif(isNull(monto_bs) || trim(toString(monto_bs)) == '', toDecimal(0.0), toDecimal(replace(trim(toString(monto_bs)), ',', ''))),",
+				"          tipo_carne = case(     lower(trim(toString(tipo_carne))) == 'vaca' || lower(trim(toString(tipo_carne))) == 'vaaca' || lower(trim(toString(tipo_carne))) == 'vaa' || lower(trim(toString(tipo_carne))) == 'vca' || lower(trim(toString(tipo_carne))) == 'vcaa' || lower(trim(toString(tipo_carne))) == 'vacca' || lower(trim(toString(tipo_carne))) == 'vcc' || lower(trim(toString(tipo_carne))) == 'vaac', 'Vaca',     lower(trim(toString(tipo_carne))) == 'pollo' || lower(trim(toString(tipo_carne))) == 'pllo' || lower(trim(toString(tipo_carne))) == 'polllo' || lower(trim(toString(tipo_carne))) == 'plolo' || lower(trim(toString(tipo_carne))) == 'polo' || lower(trim(toString(tipo_carne))) == 'poollo' || lower(trim(toString(tipo_carne))) == 'polol' || lower(trim(toString(tipo_carne))) == 'pollllo', 'Pollo',     lower(trim(toString(tipo_carne))) == 'cerdo' || lower(trim(toString(tipo_carne))) == 'cedo' || lower(trim(toString(tipo_carne))) == 'cero' || lower(trim(toString(tipo_carne))) == 'cedro' || lower(trim(toString(tipo_carne))) == 'cerrdo' || lower(trim(toString(tipo_carne))) == 'ceerdo' || lower(trim(toString(tipo_carne))) == 'crdo' || lower(trim(toString(tipo_carne))) == 'cerod' || lower(trim(toString(tipo_carne))) == 'cerddo' || lower(trim(toString(tipo_carne))) == 'credo', 'Cerdo',     lower(trim(toString(tipo_carne))) == 'pescado' || lower(trim(toString(tipo_carne))) == 'pescdao' || lower(trim(toString(tipo_carne))) == 'pescao' || lower(trim(toString(tipo_carne))) == 'pesacdo' || lower(trim(toString(tipo_carne))) == 'peescado' || lower(trim(toString(tipo_carne))) == 'psecado' || lower(trim(toString(tipo_carne))) == 'psecdo' || lower(trim(toString(tipo_carne))) == 'pescdo' || lower(trim(toString(tipo_carne))) == 'pesscado' || lower(trim(toString(tipo_carne))) == 'pescdo', 'Pescado',     'Sin Especificar' )) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[''],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
