@@ -48,7 +48,7 @@
 				"          municipio = trim(toString(municipio))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['spl_empleadores.parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

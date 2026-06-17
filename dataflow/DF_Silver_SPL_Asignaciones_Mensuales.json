@@ -52,7 +52,7 @@
 				"          afiliacion_id = toInteger(afiliacion_id)) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['spl_asignacion_mensuales.parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

@@ -47,7 +47,7 @@
 				"          Estado = iif( isNull(Estado) || trim(toString(Estado))=='', 'Inactiva', initCap(lower(trim(toString(Estado)))) )) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['spl_cajas.parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

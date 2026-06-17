@@ -51,7 +51,7 @@
 				"          productos =      iif(isNull(productos) || trim(toString(productos)) == '', 'Sin Productos', initCap(lower(trim(toString(productos)))))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['spl_entrega_agencia.parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

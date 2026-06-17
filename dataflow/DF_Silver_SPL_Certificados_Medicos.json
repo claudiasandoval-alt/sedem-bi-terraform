@@ -50,7 +50,7 @@
 				"          medico_responsable = trim(toString(medico_responsable))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['spl_certificados_medicos.parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
