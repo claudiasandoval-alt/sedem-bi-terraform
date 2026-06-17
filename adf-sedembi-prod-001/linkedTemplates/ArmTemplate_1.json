@@ -1,0 +1,794 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adf-sedembi-prod-001"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Silver_Parquet_SPL_Cajas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake_SEDEM",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Silver/SPL"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "silver"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Silver_Parquet_SPL_Certificados_Medicos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake_SEDEM",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Silver/SPL"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "silver"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Silver_Parquet_SPL_Empleadores')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake_SEDEM",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Silver/SPL"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "silver"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Silver_Parquet_SPL_Entrega_Agencia')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake_SEDEM",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Silver/SPL"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "spl",
+						"fileSystem": "silver"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Silver_Parquet_SPL_Entregas_Supermercado')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake_SEDEM",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Silver/SPL"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "silver"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Silver_Parquet_SPL_Supermercado')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake_SEDEM",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Silver/SPL"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "spl",
+						"fileSystem": "silver"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SEGIP_Persona')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SEGIP"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SEGIP",
+								"type": "DatasetReference"
+							},
+							"name": "OrigenSegipPersonas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SEGIP",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoSilverSegip"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ci as string,",
+						"          nombres as string,",
+						"          apellido_paterno as string,",
+						"          apellido_materno as string,",
+						"          fecha_nacimiento as date,",
+						"          genero as string,",
+						"          estado_civil as string,",
+						"          ci_conyuge as string,",
+						"          numero_hijos as short,",
+						"          ci_padre as string,",
+						"          ci_madre as string,",
+						"          profesion as string,",
+						"          nivel_estudios as string,",
+						"          municipio_residencia as string,",
+						"          fecha_emision as date",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> OrigenSegipPersonas",
+						"OrigenSegipPersonas derive(nombres = trim(nombres),",
+						"          apellido_paterno = trim(apellido_paterno),",
+						"          apellido_materno = trim(apellido_materno)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['segip_personas.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> DestinoSilverSegip"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Afiliacion')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Afiliaciones_csv",
+								"type": "DatasetReference"
+							},
+							"name": "afiliaciones"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Afiliacion",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          afiliacion_id as string,",
+						"          ci_beneficiaria as string,",
+						"          empleador_id as string,",
+						"          caja_id as string,",
+						"          fecha_afiliacion as string,",
+						"          nro_matricula as string,",
+						"          tipo_subsidio as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> afiliaciones",
+						"afiliaciones derive(estado = iif(     isNull(estado) || trim(toString(estado))=='',     'Sin Estado',     trim(toString(estado)) ),",
+						"          fecha_afiliacion = toDate(toString(fecha_afiliacion),'yyyy-MM-dd'),",
+						"          afiliacion_id = toInteger(afiliacion_id),",
+						"          caja_id = toInteger(caja_id),",
+						"          empleador_id = toInteger(empleador_id),",
+						"          ci_beneficiaria = trim(toString(ci_beneficiaria))) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_Afiliacion.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Asignaciones_Mensuales')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Asignaciones_Mensuales_csv",
+								"type": "DatasetReference"
+							},
+							"name": "AsigMensuales"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Asiganciones_Mensuales",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          asignacion_id as string,",
+						"          afiliacion_id as string,",
+						"          mes as string,",
+						"          gestion as string,",
+						"          monto_bs as string,",
+						"          monto_productos as string,",
+						"          monto_carnes as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> AsigMensuales",
+						"AsigMensuales derive(estado = iif(     isNull(estado) || trim(toString(estado))=='',     'Sin Estado',     initCap(lower(trim(toString(estado)))) ),",
+						"          mes = iif(     isNull(mes) || trim(toString(mes))=='',     'Sin Mes',     initCap(lower(trim(toString(mes)))) ),",
+						"          monto_productos = iif(     isNull(monto_productos),     toDecimal(0.0,10,2),     toDecimal(monto_productos,10,2) ),",
+						"          monto_bs = iif(     isNull(monto_bs),     toDecimal(0.0,10,2),     toDecimal(monto_bs,10,2) ),",
+						"          monto_carnes = iif(     isNull(monto_carnes),     toDecimal(0.0,10,2),     toDecimal(monto_carnes,10,2) ),",
+						"          gestion = toInteger(gestion),",
+						"          afiliacion_id = toInteger(afiliacion_id)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_asignacion_mensuales.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Cajas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Cajas_csv",
+								"type": "DatasetReference"
+							},
+							"name": "splcajas"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Cajas",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          Nombre as string,",
+						"          Sigla as string,",
+						"          Tipo as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> splcajas",
+						"splcajas derive(ID = toInteger(ID),",
+						"          Nombre = trim(toString(Nombre)),",
+						"          Sigla = upper(trim(toString(Sigla))),",
+						"          Tipo = iif( isNull(Tipo) || trim(toString(Tipo))=='', 'Sin Tipo', initCap(lower(trim(toString(Tipo)))) ),",
+						"          Estado = iif( isNull(Estado) || trim(toString(Estado))=='', 'Inactiva', initCap(lower(trim(toString(Estado)))) )) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_cajas.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Silver_Parquet_SPL_Cajas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Certificados_Medicos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Certificados_Medicos_csv",
+								"type": "DatasetReference"
+							},
+							"name": "cerMedicos"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Certificados_Medicos",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          certificado_id as string,",
+						"          afiliacion_id as string,",
+						"          fecha_emision as string,",
+						"          semana_gestacion as string,",
+						"          fecha_probable_parto as string,",
+						"          medico_responsable as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> cerMedicos",
+						"cerMedicos derive(certificado_id = toInteger(certificado_id),",
+						"          fecha_probable_parto = iif(     isNull(fecha_probable_parto) || trim(toString(fecha_probable_parto))=='',     toDate('1900-01-01'),     toDate(toString(fecha_probable_parto),'yyyy-MM-dd') ),",
+						"          semana_gestacion = toInteger(     iif(         isNull(semana_gestacion) || trim(toString(semana_gestacion))=='',         '0',         toString(semana_gestacion)     ) ),",
+						"          fecha_emision = toDate(toString(fecha_emision),'yyyy-MM-dd'),",
+						"          estado = iif( isNull(estado) || trim(toString(estado))=='', 'Sin Estado', initCap(lower(trim(toString(estado)))) ),",
+						"          medico_responsable = trim(toString(medico_responsable))) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_certificados_medicos.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Silver_Parquet_SPL_Certificados_Medicos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Empleadores')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Empleadores_csv",
+								"type": "DatasetReference"
+							},
+							"name": "empleadores"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Empleadores",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          empleador_id as string,",
+						"          nit as string,",
+						"          razon_social as string,",
+						"          tipo as string,",
+						"          nro_patronal as string,",
+						"          municipio as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> empleadores",
+						"empleadores derive(empleador_id =      toInteger(trim(empleador_id)),",
+						"          nit = trim(toString(nit)),",
+						"          razon_social = trim(toString(razon_social)),",
+						"          tipo = initCap(trim(toString(tipo))),",
+						"          municipio = trim(toString(municipio))) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_empleadores.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Silver_Parquet_SPL_Empleadores')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Entrega_Agencia')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Entrega_Agencia_csv",
+								"type": "DatasetReference"
+							},
+							"name": "entrAgencia"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Entrega_Agencia",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          entrega_ag_id as string,",
+						"          asignacion_id as string,",
+						"          ci_beneficiaria as string,",
+						"          fecha_entrega as string,",
+						"          productos as string,",
+						"          lote as string,",
+						"          peso_kg as string,",
+						"          punto_entrega as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> entrAgencia",
+						"entrAgencia derive(ci_beneficiaria = iif(isNull(ci_beneficiaria) || trim(toString(ci_beneficiaria)) == '', 'SIN_CI', upper(regexReplace(trim(toString(ci_beneficiaria)), '[^a-zA-Z0-9]', ''))),",
+						"          fecha_entrega = iif(isNull(fecha_entrega) || trim(toString(fecha_entrega)) == '', toDate(null()), coalesce(toDate(trim(toString(fecha_entrega)), 'yyyy-MM-dd'), toDate(trim(toString(fecha_entrega)), 'dd/MM/yyyy'), toDate(trim(toString(fecha_entrega)), 'dd-MM-yyyy'))),",
+						"          peso_kg =      iif(isNull(peso_kg) || trim(toString(peso_kg)) == '', toDecimal(0.0), toDecimal(replace(trim(toString(peso_kg)), ',', ''))),",
+						"          punto_entrega =      iif(isNull(punto_entrega) || trim(toString(punto_entrega)) == '', 'Sin Especificar', initCap(lower(trim(toString(punto_entrega))))),",
+						"          lote = upper(trim(toString(lote))),",
+						"          productos =      iif(isNull(productos) || trim(toString(productos)) == '', 'Sin Productos', initCap(lower(trim(toString(productos)))))) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_entrega_agencia.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Silver_Parquet_SPL_Entrega_Agencia')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Entrega_Supermercados')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Entregas_Supermercado_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Entregas_Supermercado",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          entrega_super_id as string,",
+						"          asignacion_id as string,",
+						"          ci_beneficiaria as string,",
+						"          supermercado_id as string,",
+						"          fecha_retiro as string,",
+						"          tipo_carne as string,",
+						"          cantidad_kg as string,",
+						"          monto_bs as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 derive(ci_beneficiaria = iif(isNull(ci_beneficiaria) || trim(toString(ci_beneficiaria)) == '', 'SIN_CI', upper(regexReplace(trim(toString(ci_beneficiaria)), '[^a-zA-Z0-9]', ''))),",
+						"          fecha_retiro = iif(isNull(fecha_retiro) || trim(toString(fecha_retiro)) == '', toDate(null()), coalesce(toDate(trim(toString(fecha_retiro)), 'yyyy-MM-dd'), toDate(trim(toString(fecha_retiro)), 'dd-MM-yyyy'), toDate(trim(toString(fecha_retiro)), 'dd/MM/yyyy'), toDate(trim(toString(fecha_retiro)), 'MM/dd/yyyy'))),",
+						"          cantidad_kg =      iif(isNull(cantidad_kg) || trim(toString(cantidad_kg)) == '', toDecimal(0.0), toDecimal(replace(trim(toString(cantidad_kg)), ',', ''))),",
+						"          monto_bs = iif(isNull(monto_bs) || trim(toString(monto_bs)) == '', toDecimal(0.0), toDecimal(replace(trim(toString(monto_bs)), ',', ''))),",
+						"          tipo_carne = case(     lower(trim(toString(tipo_carne))) == 'vaca' || lower(trim(toString(tipo_carne))) == 'vaaca' || lower(trim(toString(tipo_carne))) == 'vaa' || lower(trim(toString(tipo_carne))) == 'vca' || lower(trim(toString(tipo_carne))) == 'vcaa' || lower(trim(toString(tipo_carne))) == 'vacca' || lower(trim(toString(tipo_carne))) == 'vcc' || lower(trim(toString(tipo_carne))) == 'vaac', 'Vaca',     lower(trim(toString(tipo_carne))) == 'pollo' || lower(trim(toString(tipo_carne))) == 'pllo' || lower(trim(toString(tipo_carne))) == 'polllo' || lower(trim(toString(tipo_carne))) == 'plolo' || lower(trim(toString(tipo_carne))) == 'polo' || lower(trim(toString(tipo_carne))) == 'poollo' || lower(trim(toString(tipo_carne))) == 'polol' || lower(trim(toString(tipo_carne))) == 'pollllo', 'Pollo',     lower(trim(toString(tipo_carne))) == 'cerdo' || lower(trim(toString(tipo_carne))) == 'cedo' || lower(trim(toString(tipo_carne))) == 'cero' || lower(trim(toString(tipo_carne))) == 'cedro' || lower(trim(toString(tipo_carne))) == 'cerrdo' || lower(trim(toString(tipo_carne))) == 'ceerdo' || lower(trim(toString(tipo_carne))) == 'crdo' || lower(trim(toString(tipo_carne))) == 'cerod' || lower(trim(toString(tipo_carne))) == 'cerddo' || lower(trim(toString(tipo_carne))) == 'credo', 'Cerdo',     lower(trim(toString(tipo_carne))) == 'pescado' || lower(trim(toString(tipo_carne))) == 'pescdao' || lower(trim(toString(tipo_carne))) == 'pescao' || lower(trim(toString(tipo_carne))) == 'pesacdo' || lower(trim(toString(tipo_carne))) == 'peescado' || lower(trim(toString(tipo_carne))) == 'psecado' || lower(trim(toString(tipo_carne))) == 'psecdo' || lower(trim(toString(tipo_carne))) == 'pescdo' || lower(trim(toString(tipo_carne))) == 'pesscado' || lower(trim(toString(tipo_carne))) == 'pescdo', 'Pescado',     'Sin Especificar' )) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_entrega_supermercados.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Silver_Parquet_SPL_Entregas_Supermercado')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_SPL_Supermercados')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Bronze/SPL"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Bronze_SPL_Supermercados_csv",
+								"type": "DatasetReference"
+							},
+							"name": "supermerc"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Silver_Parquet_SPL_Supermercado",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          Cadena as string,",
+						"          Sucursal as string,",
+						"          Municipio as string,",
+						"          {Dirección} as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> supermerc",
+						"supermerc derive(ID =      toInteger(trim(toString(ID))),",
+						"          Cadena = trim(toString(Cadena)),",
+						"          Sucursal = trim(toString(Sucursal)),",
+						"          Municipio =      trim(toString(Municipio)),",
+						"          Estado = initCap(lower(trim(toString(Estado))))) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['spl_supermercados.parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_Silver_Parquet_SPL_Supermercado')]"
+			]
+		}
+	]
+}
