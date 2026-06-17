@@ -15,11 +15,7 @@
 					"name": "catpaquetes"
 				}
 			],
-			"sinks": [
-				{
-					"name": "sink1"
-				}
-			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -40,11 +36,7 @@
 				"          nombre =      trim(toString(byName('nombre'))),",
 				"          contenido = trim(toString(byName('contenido'))),",
 				"          peso_estandar_kg =      toDecimal(trim(toString(byName('peso_estandar_kg')))),",
-				"          costo_estimado_bs =      toDecimal(trim(toString(byName('costo_estimado_bs'))))) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"          costo_estimado_bs =      toDecimal(trim(toString(byName('costo_estimado_bs'))))) ~> derivedColumn1"
 			]
 		}
 	}

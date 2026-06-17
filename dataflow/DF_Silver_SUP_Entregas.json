@@ -15,11 +15,7 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [
-				{
-					"name": "sink1"
-				}
-			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -49,11 +45,7 @@
 				"          entrega_id = toInteger(trim(toString(byName('entrega_id')))),",
 				"          boleta_id = toInteger(trim(toString(byName('boleta_id')))),",
 				"          establecimiento_id = toInteger(trim(toString(byName('establecimiento_id')))),",
-				"          paquete_id =      toInteger(trim(toString(byName('paquete_id'))))) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"          paquete_id =      toInteger(trim(toString(byName('paquete_id'))))) ~> derivedColumn1"
 			]
 		}
 	}

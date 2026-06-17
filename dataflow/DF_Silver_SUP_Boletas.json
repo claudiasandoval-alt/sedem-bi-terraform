@@ -15,11 +15,7 @@
 					"name": "boletas"
 				}
 			],
-			"sinks": [
-				{
-					"name": "sink1"
-				}
-			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -40,11 +36,7 @@
 				"boletas derive(fecha_emision = iif(isNull(byName('fecha_emision')) || trim(toString(byName('fecha_emision'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_emision'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_emision'))), 'dd-MM-yyyy'), toDate(trim(toString(byName('fecha_emision'))), 'dd/MM/yyyy'))),",
 				"          ci_beneficiaria =      iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
 				"          estado =      iif(isNull(byName('estado')) || trim(toString(byName('estado'))) == '', 'Sin Estado', initCap(lower(trim(toString(byName('estado')))))),",
-				"          nro_boleta =      upper(trim(toString(byName('nro_boleta'))))) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"          nro_boleta =      upper(trim(toString(byName('nro_boleta'))))) ~> derivedColumn1"
 			]
 		}
 	}
