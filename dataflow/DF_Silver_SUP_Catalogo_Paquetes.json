@@ -1,0 +1,51 @@
+{
+	"name": "DF_Silver_SUP_Catalogo_Paquetes",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SUP"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SUP_Catalogo_Paquetes_csv",
+						"type": "DatasetReference"
+					},
+					"name": "catpaquetes"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          paquete_id as string,",
+				"          nombre as string,",
+				"          contenido as string,",
+				"          peso_estandar_kg as string,",
+				"          costo_estimado_bs as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> catpaquetes",
+				"catpaquetes derive(paquete_id = toInteger(trim(toString(byName('paquete_id')))),",
+				"          nombre =      trim(toString(byName('nombre'))),",
+				"          contenido = trim(toString(byName('contenido'))),",
+				"          peso_estandar_kg =      toDecimal(trim(toString(byName('peso_estandar_kg')))),",
+				"          costo_estimado_bs =      toDecimal(trim(toString(byName('costo_estimado_bs'))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

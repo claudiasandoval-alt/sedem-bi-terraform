@@ -1,0 +1,60 @@
+{
+	"name": "DF_Silver_SUP_Entregas",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SUP"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SUP_Entregas_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          entrega_id as string,",
+				"          boleta_id as string,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as string,",
+				"          paquete_id as string,",
+				"          paquete_nombre as string,",
+				"          fecha_entrega as string,",
+				"          lote_produccion as string,",
+				"          peso_paquete_kg as string,",
+				"          fecha_proxima_entrega as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(ci_beneficiaria =      iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
+				"          fecha_entrega = iif(isNull(byName('fecha_entrega')) || trim(toString(byName('fecha_entrega'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_entrega'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_entrega'))), 'dd/MM/yyyy'), toDate(trim(toString(byName('fecha_entrega'))), 'MM/dd/yyyy'), toDate(trim(toString(byName('fecha_entrega'))), 'dd-MM-yyyy'))),",
+				"          fecha_proxima_entrega = iif(isNull(byName('fecha_proxima_entrega')) || trim(toString(byName('fecha_proxima_entrega'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_proxima_entrega'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_proxima_entrega'))), 'dd/MM/yyyy'), toDate(trim(toString(byName('fecha_proxima_entrega'))), 'MM/dd/yyyy'), toDate(trim(toString(byName('fecha_proxima_entrega'))), 'dd-MM-yyyy'))),",
+				"          peso_paquete_kg = iif(isNull(byName('peso_paquete_kg')) || trim(toString(byName('peso_paquete_kg'))) == '', toDecimal(0.0), toDecimal(replace(trim(toString(byName('peso_paquete_kg'))), ',', ''))),",
+				"          lote_produccion = iif(isNull(byName('lote_produccion')) || trim(toString(byName('lote_produccion'))) == '', 'Sin Lote', upper(trim(toString(byName('lote_produccion'))))),",
+				"          entrega_id = toInteger(trim(toString(byName('entrega_id')))),",
+				"          boleta_id = toInteger(trim(toString(byName('boleta_id')))),",
+				"          establecimiento_id = toInteger(trim(toString(byName('establecimiento_id')))),",
+				"          paquete_id =      toInteger(trim(toString(byName('paquete_id'))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

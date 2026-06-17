@@ -1,0 +1,59 @@
+{
+	"name": "DF_Silver_SUP_Establecimientos",
+	"properties": {
+		"folder": {
+			"name": "Bronze/SUP"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Bronze_SUP_Establecimientos_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          establecimiento_id as string,",
+				"          codigo_snis as string,",
+				"          nombre as string,",
+				"          tipo as string,",
+				"          nivel_atencion as string,",
+				"          municipio as string,",
+				"          departamento as string,",
+				"          red_salud as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(establecimiento_id = toInteger(trim(toString(byName('establecimiento_id')))),",
+				"          codigo_snis = upper(trim(toString(byName('codigo_snis')))),",
+				"          nombre = trim(toString(byName('nombre'))),",
+				"          tipo = initCap(lower(trim(toString(byName('tipo'))))),",
+				"          nivel_atencion = initCap(lower(trim(toString(byName('nivel_atencion'))))),",
+				"          municipio = trim(toString(byName('municipio'))),",
+				"          departamento = upper(trim(toString(byName('departamento')))),",
+				"          red_salud =      trim(toString(byName('red_salud'))),",
+				"          estado = initCap(lower(trim(toString(byName('estado')))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
