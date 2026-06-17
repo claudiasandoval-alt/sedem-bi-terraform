@@ -15,7 +15,11 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -39,7 +43,11 @@
 				"          ci_beneficiaria =      iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
 				"          semana_gestacion = iif(isNull(byName('semana_gestacion')) || trim(toString(byName('semana_gestacion'))) == '', toInteger(null()), toInteger(trim(toString(byName('semana_gestacion'))))),",
 				"          peso_madre_kg = iif(isNull(byName('presion_arterial')) || trim(toString(byName('presion_arterial'))) == '', 'Sin Registro', trim(toString(byName('presion_arterial')))),",
-				"          establecimiento_id =      toInteger(trim(toString(byName('establecimiento_id'))))) ~> derivedColumn1"
+				"          establecimiento_id =      toInteger(trim(toString(byName('establecimiento_id'))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}

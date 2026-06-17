@@ -15,7 +15,11 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -44,7 +48,11 @@
 				"          municipio = trim(toString(byName('municipio'))),",
 				"          departamento = upper(trim(toString(byName('departamento')))),",
 				"          red_salud =      trim(toString(byName('red_salud'))),",
-				"          estado = initCap(lower(trim(toString(byName('estado')))))) ~> derivedColumn1"
+				"          estado = initCap(lower(trim(toString(byName('estado')))))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
