@@ -31,17 +31,7 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [
-				{
-					"name": "select1"
-				},
-				{
-					"name": "select2"
-				},
-				{
-					"name": "union1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          ci as string,",
@@ -77,34 +67,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2",
-				"source1 select(mapColumn(",
-				"          establecimiento_id,",
-				"          codigo_snis,",
-				"          nombre,",
-				"          tipo,",
-				"          nivel_atencion,",
-				"          municipio,",
-				"          departamento,",
-				"          red_salud,",
-				"          estado",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"source2 select(mapColumn(",
-				"          establecimiento_id,",
-				"          codigo_snis,",
-				"          nombre,",
-				"          tipo,",
-				"          nivel_atencion,",
-				"          municipio,",
-				"          departamento,",
-				"          red_salud,",
-				"          estado",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
-				"select2, select1 union(byName: true)~> union1",
-				"union1 sink(allowSchemaDrift: true,",
+				"source2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          BeneficiariaKey as integer,",
