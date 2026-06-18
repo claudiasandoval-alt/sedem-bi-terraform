@@ -19,11 +19,14 @@
 			"transformations": [
 				{
 					"name": "select1"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          establecimiento_id as string,",
+				"          establecimiento_id as short,",
 				"          codigo_snis as string,",
 				"          nombre as string,",
 				"          tipo as string,",
@@ -36,7 +39,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 select(mapColumn(",
+				"filter1 select(mapColumn(",
 				"          establecimiento_id,",
 				"          codigo_snis,",
 				"          nombre,",
@@ -48,7 +51,8 @@
 				"          estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"source1 filter(not(isNull(ci)) && not(isNull(fecha_nacimiento)) && length(trim(ci)) > 4) ~> filter1"
 			]
 		}
 	}
