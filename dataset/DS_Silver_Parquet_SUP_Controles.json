@@ -13,6 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "sup_controles.parquet",
+				"folderPath": "sup",
 				"fileSystem": "silver"
 			},
 			"columnDelimiter": ",",

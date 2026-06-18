@@ -13,6 +13,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "sup_entregas.parquet",
+				"folderPath": "sup",
 				"fileSystem": "silver"
 			},
 			"columnDelimiter": ",",
