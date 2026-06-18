@@ -26,12 +26,6 @@
 			],
 			"transformations": [
 				{
-					"name": "select1"
-				},
-				{
-					"name": "aggregate1"
-				},
-				{
 					"name": "derivedColumn1"
 				}
 			],
@@ -51,25 +45,10 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"derivedColumn1 select(mapColumn(",
-				"          entrega_id,",
-				"          boleta_id,",
-				"          ci_beneficiaria,",
-				"          establecimiento_id,",
-				"          paquete_id,",
-				"          paquete_nombre,",
-				"          fecha_entrega,",
-				"          lote_produccion,",
-				"          peso_paquete_kg,",
-				"          fecha_proxima_entrega",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"source1 aggregate(groupBy(fecha_entrega)) ~> aggregate1",
-				"aggregate1 derive(Anio = year(fecha_entrega),",
+				"source1 derive(Anio = year(fecha_entrega),",
 				"          Mes = month(fecha_entrega),",
 				"          Dia = dayOfMonth(fecha_entrega)) ~> derivedColumn1",
-				"select1 sink(allowSchemaDrift: true,",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          TiempoKey as integer,",

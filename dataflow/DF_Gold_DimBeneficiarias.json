@@ -9,10 +9,17 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DS_Silver_Parquet_SUP_Inscripciones",
+						"referenceName": "DS_Silver_Parquet_SEGIP",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Inscripciones",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -27,9 +34,35 @@
 			"transformations": [
 				{
 					"name": "select1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "union1"
 				}
 			],
 			"scriptLines": [
+				"source(output(",
+				"          ci as string,",
+				"          nombres as string,",
+				"          apellido_paterno as string,",
+				"          apellido_materno as string,",
+				"          fecha_nacimiento as date,",
+				"          genero as string,",
+				"          estado_civil as string,",
+				"          ci_conyuge as string,",
+				"          numero_hijos as short,",
+				"          ci_padre as string,",
+				"          ci_madre as string,",
+				"          profesion as string,",
+				"          nivel_estudios as string,",
+				"          municipio_residencia as string,",
+				"          fecha_emision as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
 				"source(output(",
 				"          establecimiento_id as short,",
 				"          codigo_snis as string,",
@@ -43,7 +76,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
+				"     ignoreNoFilesFound: false) ~> source2",
 				"source1 select(mapColumn(",
 				"          establecimiento_id,",
 				"          codigo_snis,",
@@ -57,7 +90,21 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"source2 select(mapColumn(",
+				"          establecimiento_id,",
+				"          codigo_snis,",
+				"          nombre,",
+				"          tipo,",
+				"          nivel_atencion,",
+				"          municipio,",
+				"          departamento,",
+				"          red_salud,",
+				"          estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2, select1 union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          BeneficiariaKey as integer,",
@@ -71,7 +118,6 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
-				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
