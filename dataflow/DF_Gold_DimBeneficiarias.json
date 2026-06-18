@@ -15,13 +15,18 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Gold_DimBeneficiaria",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "select1"
-				},
-				{
-					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -39,7 +44,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"filter1 select(mapColumn(",
+				"source1 select(mapColumn(",
 				"          establecimiento_id,",
 				"          codigo_snis,",
 				"          nombre,",
@@ -52,7 +57,25 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"source1 filter(not(isNull(ci)) && not(isNull(fecha_nacimiento)) && length(trim(ci)) > 4) ~> filter1"
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          BeneficiariaKey as integer,",
+				"          IdBeneficiaria as integer,",
+				"          NumeroDocumento as string,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date,",
+				"          Sexo as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
