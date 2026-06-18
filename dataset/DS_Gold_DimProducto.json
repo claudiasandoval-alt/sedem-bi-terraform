@@ -1,0 +1,42 @@
+{
+	"name": "DS_Gold_DimProducto",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDatabase_DWH",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ProductoKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IdProducto",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NombrePaquete",
+				"type": "varchar"
+			},
+			{
+				"name": "Categoria",
+				"type": "varchar"
+			},
+			{
+				"name": "Proveedor",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "DimProducto"
+		}
+	}
+}

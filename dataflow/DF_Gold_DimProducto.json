@@ -1,0 +1,42 @@
+{
+	"name": "DF_Gold_DimProducto",
+	"properties": {
+		"folder": {
+			"name": "Gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Catalogo_Paquetes",
+						"type": "DatasetReference"
+					},
+					"name": "OrigenSilverProductos"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OrigenSilverProductos",
+				"OrigenSilverProductos derive(Categoria = 'Paquete de Subsidio',",
+				"          Proveedor = 'SEDEM') ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          Categoria,",
+				"          Proveedor",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}

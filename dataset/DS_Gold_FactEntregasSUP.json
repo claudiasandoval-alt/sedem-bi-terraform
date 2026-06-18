@@ -1,0 +1,61 @@
+{
+	"name": "DS_Gold_FactEntregasSUP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDatabase_DWH",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EntregaKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IdEntregaOriginal",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "BeneficiariaKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ProductoKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "EstablecimientoKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TiempoKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CantidadEntregada",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MontoTotal",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "FactEntregasSUP"
+		}
+	}
+}

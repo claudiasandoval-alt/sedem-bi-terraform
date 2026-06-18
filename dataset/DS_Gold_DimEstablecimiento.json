@@ -1,0 +1,42 @@
+{
+	"name": "DS_Gold_DimEstablecimiento",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDatabase_DWH",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EstablecimientoKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IdEstablecimiento",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NombreEstablecimiento",
+				"type": "varchar"
+			},
+			{
+				"name": "TipoEstablecimiento",
+				"type": "varchar"
+			},
+			{
+				"name": "Ciudad",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "DimEstablecimiento"
+		}
+	}
+}

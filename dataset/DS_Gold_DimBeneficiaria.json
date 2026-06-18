@@ -1,0 +1,46 @@
+{
+	"name": "DS_Gold_DimBeneficiaria",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDatabase_DWH",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BeneficiariaKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "IdBeneficiaria",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NumeroDocumento",
+				"type": "varchar"
+			},
+			{
+				"name": "NombreCompleto",
+				"type": "varchar"
+			},
+			{
+				"name": "FechaNacimiento",
+				"type": "date"
+			},
+			{
+				"name": "Sexo",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "DimBeneficiaria"
+		}
+	}
+}
