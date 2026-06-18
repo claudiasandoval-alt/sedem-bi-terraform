@@ -17,6 +17,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Controles",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -39,15 +43,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 derive(fecha_control =      iif(isNull(byName('fecha_control')) || trim(toString(byName('fecha_control'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_control'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_control'))), 'dd/MM/yyyy'), toDate(trim(toString(byName('fecha_control'))), 'MM/dd/yyyy'), toDate(trim(toString(byName('fecha_control'))), 'dd-MM-yyyy'))),",
-				"          ci_beneficiaria =      iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
+				"source1 derive(fecha_control = iif(isNull(byName('fecha_control')) || trim(toString(byName('fecha_control'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_control'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_control'))), 'dd/MM/yyyy'), toDate(trim(toString(byName('fecha_control'))), 'MM/dd/yyyy'), toDate(trim(toString(byName('fecha_control'))), 'dd-MM-yyyy'))),",
+				"          ci_beneficiaria = iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
 				"          semana_gestacion = iif(isNull(byName('semana_gestacion')) || trim(toString(byName('semana_gestacion'))) == '', toInteger(null()), toInteger(trim(toString(byName('semana_gestacion'))))),",
 				"          peso_madre_kg = iif(isNull(byName('presion_arterial')) || trim(toString(byName('presion_arterial'))) == '', 'Sin Registro', trim(toString(byName('presion_arterial')))),",
-				"          establecimiento_id =      toInteger(trim(toString(byName('establecimiento_id'))))) ~> derivedColumn1",
+				"          establecimiento_id = toInteger(trim(toString(byName('establecimiento_id'))))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['sup_controles.parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

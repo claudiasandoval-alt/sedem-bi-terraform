@@ -17,6 +17,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Entregas",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -41,7 +45,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 derive(ci_beneficiaria =      iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
+				"source1 derive(ci_beneficiaria = iif(isNull(byName('ci_beneficiaria')) || trim(toString(byName('ci_beneficiaria'))) == '', 'SIN_CI', upper(regexReplace(trim(toString(byName('ci_beneficiaria'))), '[^a-zA-Z0-9]', ''))),",
 				"          fecha_entrega = iif(isNull(byName('fecha_entrega')) || trim(toString(byName('fecha_entrega'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_entrega'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_entrega'))), 'dd/MM/yyyy'), toDate(trim(toString(byName('fecha_entrega'))), 'MM/dd/yyyy'), toDate(trim(toString(byName('fecha_entrega'))), 'dd-MM-yyyy'))),",
 				"          fecha_proxima_entrega = iif(isNull(byName('fecha_proxima_entrega')) || trim(toString(byName('fecha_proxima_entrega'))) == '', toDate(null()), coalesce(toDate(trim(toString(byName('fecha_proxima_entrega'))), 'yyyy-MM-dd'), toDate(trim(toString(byName('fecha_proxima_entrega'))), 'dd/MM/yyyy'), toDate(trim(toString(byName('fecha_proxima_entrega'))), 'MM/dd/yyyy'), toDate(trim(toString(byName('fecha_proxima_entrega'))), 'dd-MM-yyyy'))),",
 				"          peso_paquete_kg = iif(isNull(byName('peso_paquete_kg')) || trim(toString(byName('peso_paquete_kg'))) == '', toDecimal(0.0), toDecimal(replace(trim(toString(byName('peso_paquete_kg'))), ',', ''))),",
@@ -49,11 +53,16 @@
 				"          entrega_id = toInteger(trim(toString(byName('entrega_id')))),",
 				"          boleta_id = toInteger(trim(toString(byName('boleta_id')))),",
 				"          establecimiento_id = toInteger(trim(toString(byName('establecimiento_id')))),",
-				"          paquete_id =      toInteger(trim(toString(byName('paquete_id'))))) ~> derivedColumn1",
+				"          paquete_id = toInteger(trim(toString(byName('paquete_id'))))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['sup_entregas.parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

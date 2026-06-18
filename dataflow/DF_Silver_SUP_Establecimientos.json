@@ -17,6 +17,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Establecimientos",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -47,12 +51,17 @@
 				"          nivel_atencion = initCap(lower(trim(toString(byName('nivel_atencion'))))),",
 				"          municipio = trim(toString(byName('municipio'))),",
 				"          departamento = upper(trim(toString(byName('departamento')))),",
-				"          red_salud =      trim(toString(byName('red_salud'))),",
+				"          red_salud = trim(toString(byName('red_salud'))),",
 				"          estado = initCap(lower(trim(toString(byName('estado')))))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['sup_establecimientos.parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

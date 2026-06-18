@@ -1,0 +1,25 @@
+{
+	"name": "DS_Silver_Parquet_SUP_Boletas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake_SEDEM",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Silver/SUP"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "silver"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

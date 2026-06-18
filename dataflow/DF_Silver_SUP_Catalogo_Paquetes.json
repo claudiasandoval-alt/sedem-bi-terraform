@@ -17,6 +17,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Catalogo_Paquetes",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -37,14 +41,19 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> catpaquetes",
 				"catpaquetes derive(paquete_id = toInteger(trim(toString(byName('paquete_id')))),",
-				"          nombre =      trim(toString(byName('nombre'))),",
+				"          nombre = trim(toString(byName('nombre'))),",
 				"          contenido = trim(toString(byName('contenido'))),",
-				"          peso_estandar_kg =      toDecimal(trim(toString(byName('peso_estandar_kg')))),",
-				"          costo_estimado_bs =      toDecimal(trim(toString(byName('costo_estimado_bs'))))) ~> derivedColumn1",
+				"          peso_estandar_kg = toDecimal(trim(toString(byName('peso_estandar_kg')))),",
+				"          costo_estimado_bs = toDecimal(trim(toString(byName('costo_estimado_bs'))))) ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['sup_catalogo_paquetes.parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
