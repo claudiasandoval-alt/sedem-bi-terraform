@@ -14,7 +14,6 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "sup_establecimientos.parquet",
-				"folderPath": "sup",
 				"fileSystem": "silver"
 			},
 			"columnDelimiter": ",",

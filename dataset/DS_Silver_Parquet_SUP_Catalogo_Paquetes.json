@@ -14,7 +14,6 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "sup_catalogo_paquetes.parquet",
-				"folderPath": "sup",
 				"fileSystem": "silver"
 			},
 			"columnDelimiter": ",",

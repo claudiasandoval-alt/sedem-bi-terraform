@@ -14,7 +14,6 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "sup_inscripciones.parquet",
-				"folderPath": "sup",
 				"fileSystem": "silver"
 			},
 			"columnDelimiter": ",",
