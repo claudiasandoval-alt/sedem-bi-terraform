@@ -21,6 +21,31 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "boleta_id",
+				"type": "String"
+			},
+			{
+				"name": "control_id",
+				"type": "String"
+			},
+			{
+				"name": "ci_beneficiaria",
+				"type": "String"
+			},
+			{
+				"name": "nro_boleta",
+				"type": "String"
+			},
+			{
+				"name": "fecha_emision",
+				"type": "String"
+			},
+			{
+				"name": "estado",
+				"type": "String"
+			}
+		]
 	}
 }
