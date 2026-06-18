@@ -15,7 +15,15 @@
 					"name": "OrigenSilverProductos"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Gold_DimProducto",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoGoldDimProducto"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -44,7 +52,25 @@
 				"          Proveedor",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ProductoKey as integer,",
+				"          IdProducto as integer,",
+				"          NombrePaquete as string,",
+				"          Categoria as string,",
+				"          Proveedor as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> DestinoGoldDimProducto"
 			]
 		}
 	}
