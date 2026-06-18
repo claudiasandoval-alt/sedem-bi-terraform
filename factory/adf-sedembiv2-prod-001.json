@@ -1,0 +1,15 @@
+{
+	"name": "adf-sedembiv2-prod-001",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "008cf414-a0db-41c1-9a0b-075050240796",
+		"tenantId": "013e536d-3451-43ca-9f70-b43eea778b95"
+	}
+}
