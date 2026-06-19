@@ -1,0 +1,148 @@
+{
+	"name": "df_gold_hechos_entregas",
+	"properties": {
+		"folder": {
+			"name": "Gold"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Silver_Parquet_SUP_Entregas",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Gold_DimBeneficiaria",
+						"type": "DatasetReference"
+					},
+					"name": "dimbeneficiaria"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Gold_DimEstablecimiento",
+						"type": "DatasetReference"
+					},
+					"name": "dimestablecimiento"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Gold_DimProducto",
+						"type": "DatasetReference"
+					},
+					"name": "dimproducto"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Gold_DimTiempo",
+						"type": "DatasetReference"
+					},
+					"name": "dimtiempo"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "lookup2"
+				},
+				{
+					"name": "lookup3"
+				},
+				{
+					"name": "lookup4"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          entrega_id as string,",
+				"          boleta_id as string,",
+				"          ci_beneficiaria as string,",
+				"          establecimiento_id as string,",
+				"          paquete_id as string,",
+				"          paquete_nombre as string,",
+				"          fecha_entrega as string,",
+				"          lote_produccion as string,",
+				"          peso_paquete_kg as string,",
+				"          fecha_proxima_entrega as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          BeneficiariaKey as integer,",
+				"          IdBeneficiaria as integer,",
+				"          NumeroDocumento as string,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date,",
+				"          Sexo as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> dimbeneficiaria",
+				"source(output(",
+				"          EstablecimientoKey as integer,",
+				"          IdEstablecimiento as integer,",
+				"          NombreEstablecimiento as string,",
+				"          TipoEstablecimiento as string,",
+				"          Ciudad as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> dimestablecimiento",
+				"source(output(",
+				"          ProductoKey as integer,",
+				"          IdProducto as integer,",
+				"          NombrePaquete as string,",
+				"          Categoria as string,",
+				"          Proveedor as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> dimproducto",
+				"source(output(",
+				"          TiempoKey as integer,",
+				"          Fecha as date,",
+				"          Anio as integer,",
+				"          Mes as integer,",
+				"          NombreMes as string,",
+				"          Dia as integer,",
+				"          DiaSemana as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> dimtiempo",
+				"derivedColumn1, dimtiempo lookup(fecha_entrega == Fecha,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"source1 derive(fecha_entrega = toDate(fecha_entrega),",
+				"          establecimiento_id = toInteger(establecimiento_id)) ~> derivedColumn1",
+				"lookup1, dimbeneficiaria lookup(ci_beneficiaria == NumeroDocumento,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup2",
+				"lookup2, dimproducto lookup(paquete_nombre == NombrePaquete,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup3",
+				"lookup3, dimestablecimiento lookup(establecimiento_id == IdEstablecimiento,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup4"
+			]
+		}
+	}
+}
