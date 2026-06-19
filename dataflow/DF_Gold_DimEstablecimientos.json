@@ -48,11 +48,8 @@
 				"          establecimiento_id,",
 				"          codigo_snis,",
 				"          nombre,",
-				"          tipo,",
-				"          nivel_atencion,",
 				"          municipio,",
 				"          departamento,",
-				"          red_salud,",
 				"          estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
@@ -70,11 +67,16 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
-				"     truncate:true,",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          IdEstablecimiento = establecimiento_id,",
+				"          NombreEstablecimiento = nombre,",
+				"          Ciudad = municipio,",
+				"          TipoEstablecimiento = codigo_snis",
+				"     )) ~> sink1"
 			]
 		}
 	}

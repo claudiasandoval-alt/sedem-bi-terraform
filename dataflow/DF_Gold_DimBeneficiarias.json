@@ -12,14 +12,7 @@
 						"referenceName": "DS_Silver_Parquet_SEGIP",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "DS_Silver_Parquet_SUP_Inscripciones",
-						"type": "DatasetReference"
-					},
-					"name": "source2"
+					"name": "orisegip"
 				}
 			],
 			"sinks": [
@@ -31,7 +24,14 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select2"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          ci as string,",
@@ -52,22 +52,21 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source(output(",
-				"          establecimiento_id as short,",
-				"          codigo_snis as string,",
-				"          nombre as string,",
-				"          tipo as string,",
-				"          nivel_atencion as string,",
-				"          municipio as string,",
-				"          departamento as string,",
-				"          red_salud as string,",
-				"          estado as string",
+				"     ignoreNoFilesFound: false) ~> orisegip",
+				"orisegip derive(NombreCompleto = nombres + ' ' + apellido_paterno + ' ' + apellido_materno,",
+				"          NumeroDocumento = toString(ci),",
+				"          IdBeneficiaria = toInteger(regexReplace(ci, '[^0-9]', ''))) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          fecha_nacimiento,",
+				"          genero,",
+				"          fecha_emision,",
+				"          NombreCompleto,",
+				"          NumeroDocumento,",
+				"          IdBeneficiaria",
 				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source2",
-				"source2 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          BeneficiariaKey as integer,",
@@ -84,7 +83,14 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          IdBeneficiaria,",
+				"          NombreCompleto,",
+				"          FechaNacimiento = fecha_nacimiento,",
+				"          Sexo = genero,",
+				"          NumeroDocumento",
+				"     )) ~> sink1"
 			]
 		}
 	}
