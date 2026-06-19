@@ -1,0 +1,19 @@
+{
+	"name": "DS_Gold_Hechos_Entregas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDatabase_DWH",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "HechosEntregas"
+		}
+	}
+}
