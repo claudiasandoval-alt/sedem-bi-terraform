@@ -27,6 +27,9 @@
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -48,7 +51,15 @@
 				"source1 derive(Anio = year(fecha_entrega),",
 				"          Mes = month(fecha_entrega),",
 				"          Dia = dayOfMonth(fecha_entrega)) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"derivedColumn1 select(mapColumn(",
+				"          fecha_entrega,",
+				"          Anio,",
+				"          Mes,",
+				"          Dia",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          TiempoKey as integer,",
@@ -66,7 +77,13 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Fecha = fecha_entrega,",
+				"          Anio,",
+				"          Mes,",
+				"          Dia",
+				"     )) ~> sink1"
 			]
 		}
 	}
